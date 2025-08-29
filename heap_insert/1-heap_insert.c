@@ -1,4 +1,5 @@
 #include "binary_trees.h"
+#include <stdlib.h>
 
 /**
  * heap_size - Calculates the size of the heap
@@ -15,60 +16,68 @@ size_t heap_size(heap_t *root)
 }
 
 /**
- * tree_height - Measures the height of a binary tree
- * @tree: Pointer to the root node of the tree
+ * find_parent_by_index - Finds parent node for insertion at specific index
+ * @root: Pointer to the root node
+ * @index: Index where new node will be inserted
+ * @size: Current size of the heap
  *
- * Return: Height of tree, 0 if tree is NULL
+ * Return: Pointer to the parent node
  */
-size_t tree_height(const heap_t *tree)
+heap_t *find_parent_by_index(heap_t *root, size_t index, size_t size)
 {
-	size_t left_height = 0;
-	size_t right_height = 0;
+	heap_t *parent;
+	size_t parent_index;
 
-	if (!tree)
-		return (0);
+	if (index == 0)
+		return (NULL);
 
-	left_height = tree->left ? 1 + tree_height(tree->left) : 0;
-	right_height = tree->right ? 1 + tree_height(tree->right) : 0;
+	parent_index = (index - 1) / 2;
 
-	return (left_height > right_height ? left_height : right_height);
+	if (parent_index == 0)
+		return (root);
+
+	if (parent_index < size / 2)
+		parent = find_parent_by_index(root->left, parent_index - 1, size / 2);
+	else
+		parent = find_parent_by_index(root->right,
+				parent_index - size / 2 - 1, size / 2);
+
+	return (parent);
 }
 
 /**
- * find_parent - Finds the parent node for the new node
+ * get_insertion_parent - Gets the parent for the next insertion
  * @root: Pointer to the root node
  *
  * Return: Pointer to the parent node
  */
-heap_t *find_parent(heap_t *root)
+heap_t *get_insertion_parent(heap_t *root)
 {
-	heap_t *parent = NULL;
-	size_t left_h, right_h;
-	size_t left_s;
+	size_t size;
+	heap_t *queue[1024];
+	int front = 0, rear = 0;
+	heap_t *current;
 
 	if (!root)
 		return (NULL);
 
-	left_h = tree_height(root->left);
-	right_h = tree_height(root->right);
-	left_s = heap_size(root->left);
+	/* Use level-order traversal to find the first node with an empty slot */
+	queue[rear++] = root;
 
-	if (!root->left || !root->right)
-		return (root);
+	while (front < rear)
+	{
+		current = queue[front++];
 
-	if (left_h == right_h)
-	{
-		if ((1 << left_h) - 1 == (int)left_s)
-			parent = find_parent(root->right);
-		else
-			parent = find_parent(root->left);
-	}
-	else
-	{
-		parent = find_parent(root->left);
+		if (!current->left || !current->right)
+			return (current);
+
+		queue[rear++] = current->left;
+		queue[rear++] = current->right;
 	}
 
-	return (parent);
+	/* This shouldn't happen in a valid heap */
+	size = heap_size(root);
+	return (find_parent_by_index(root, size, size));
 }
 
 /**
@@ -126,7 +135,7 @@ heap_t *heap_insert(heap_t **root, int value)
 		return (*root);
 	}
 
-	parent = find_parent(*root);
+	parent = get_insertion_parent(*root);
 
 	new_node = binary_tree_node(parent, value);
 	if (!new_node)
