@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(./main_0.py)",
+      "Bash(gcc:*)",
+      "Bash(./insert)",
+      "Bash(./0-node)",
+      "Bash(./1-heap_insert)",
+      "Bash(python3:*)",
+      "Bash(./1-heap_insert_test)",
+      "Bash(./test_heap)",
+      "Bash(clang:*)",
+      "Bash(timeout:*)",
+      "Bash(pip3 install:*)",
+      "Bash(./0-nqueens.py:*)",
+      "Bash(./0-heap)",
+      "Bash(./0-advanced_binary)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "/Users/fredericbourouliou"
+    ]
+  }
+}

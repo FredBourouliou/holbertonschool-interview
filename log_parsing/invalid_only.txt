@@ -1,0 +1,4 @@
+invalid line 1
+invalid line 2
+192.168.1.1 - [2024-01-01 12:00:00] "POST /projects/260 HTTP/1.1" 200 100
+192.168.1.2 - [2024-01-01 12:00:01] "GET /other/path HTTP/1.1" 200 100
