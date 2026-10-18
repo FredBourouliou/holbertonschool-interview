@@ -1,0 +1,20 @@
+# OS and editor files
+.DS_Store
+._*
+*.swp
+*~
+
+# Local AI assistant settings
+.claude/
+
+# C build artifacts
+*.o
+*.a
+*.so
+*.out
+a.out
+*.dSYM/
+
+# Python
+__pycache__/
+*.pyc
